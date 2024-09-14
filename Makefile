@@ -1,4 +1,4 @@
-NAME = project
+NAME = so_long
 
 CC = cc
 
