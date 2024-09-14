@@ -1,0 +1,8 @@
+*.o*
+*.swp*
+.idea
+*.a
+.vscode
+*.dSYM/
+*.vim
+*.code-workspace
