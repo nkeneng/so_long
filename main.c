@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:13:25 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/17 14:25:43 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/17 14:44:05 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ int	open_map_file(char *file)
 int	line_only_contains_ones(char *line)
 {
 	char	*str;
-	int i = 0;
+	int		i;
 
+	i = 0;
 	str = malloc(ft_strlen(line));
 	ft_strlcpy(str, line, ft_strlen(line) - 1);
 	while (str[i])
@@ -46,13 +47,31 @@ int	line_only_contains_ones(char *line)
 	return (1);
 }
 
+void	counts_occurences(char *line, int *num_exits, char c)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == c)
+			*num_exits += 1;
+		i++;
+	}
+}
+
 void	check_map(int fd)
 {
 	char	*line;
 	char	*prev_line;
 	size_t	map_line_length;
 	int		first_line;
+	int		num_exits;
+	int		num_starts;
+	int		num_col = 0;
 
+	num_exits = 0;
+	num_starts = 0;
 	first_line = 1;
 	line = get_next_line(fd);
 	prev_line = NULL;
@@ -88,6 +107,16 @@ void	check_map(int fd)
 				free(line);
 				exit(EXIT_FAILURE);
 			}
+			// check for exit
+			counts_occurences(line, &num_exits, 'E');
+			counts_occurences(line, &num_starts, 'P');
+			counts_occurences(line, &num_col, 'C');
+			if (num_exits > 1 || num_starts > 1)
+			{
+				ft_putstr_fd("Error\nMap has more than one exit or start\n", 2);
+				free(line);
+				exit(EXIT_FAILURE);
+			}
 		}
 		else
 		{
@@ -103,6 +132,12 @@ void	check_map(int fd)
 		free(line);
 		line = get_next_line(fd);
 		first_line = 0;
+	} // end while
+	if (num_exits == 0 || num_starts == 0 || num_col == 0)
+	{
+		ft_putstr_fd("Error\nMap has no exit or start or no collectibles\n", 2);
+		free(line);
+		exit(EXIT_FAILURE);
 	}
 }
 
