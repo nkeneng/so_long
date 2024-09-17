@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:13:25 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/17 14:44:05 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/17 15:12:48 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ int	line_only_contains_ones(char *line)
 	return (1);
 }
 
+void check_map_navigation(t_map *map, t_player *player, int fd)
+{
+
+}
+
 void	counts_occurences(char *line, int *num_exits, char c)
 {
 	int	i;
@@ -60,7 +65,7 @@ void	counts_occurences(char *line, int *num_exits, char c)
 	}
 }
 
-void	check_map(int fd)
+void	check_map(int fd, t_map *map)
 {
 	char	*line;
 	char	*prev_line;
@@ -68,7 +73,6 @@ void	check_map(int fd)
 	int		first_line;
 	int		num_exits;
 	int		num_starts;
-	int		num_col = 0;
 
 	num_exits = 0;
 	num_starts = 0;
@@ -110,7 +114,7 @@ void	check_map(int fd)
 			// check for exit
 			counts_occurences(line, &num_exits, 'E');
 			counts_occurences(line, &num_starts, 'P');
-			counts_occurences(line, &num_col, 'C');
+			counts_occurences(line, &(*map).collectibles, 'C');
 			if (num_exits > 1 || num_starts > 1)
 			{
 				ft_putstr_fd("Error\nMap has more than one exit or start\n", 2);
@@ -133,7 +137,7 @@ void	check_map(int fd)
 		line = get_next_line(fd);
 		first_line = 0;
 	} // end while
-	if (num_exits == 0 || num_starts == 0 || num_col == 0)
+	if (num_exits == 0 || num_starts == 0 || (*map).collectibles == 0)
 	{
 		ft_putstr_fd("Error\nMap has no exit or start or no collectibles\n", 2);
 		free(line);
@@ -143,12 +147,19 @@ void	check_map(int fd)
 
 int	main(int argc, char *argv[])
 {
-	// t_map	map;
+	t_map	map;
+	t_player player;
+	int fd;
+	map.collectibles = 0;
+	player.collectibles = 0;
 	if (argc != 2)
 	{
 		ft_putstr_fd("Error\nWrong number of arguments\n", 2);
 		return (EXIT_FAILURE);
 	}
-	check_map(open_map_file(argv[1]));
+	fd = open_map_file(argv[1]);
+	check_map(fd, &map);
+	ft_printf("Found %d collectibles\n", map.collectibles);
+	check_map_navigation(&map, &player, fd);
 	return (EXIT_SUCCESS);
 }
