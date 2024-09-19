@@ -19,7 +19,7 @@ else
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/X11/lib -lXext -lX11 -framework OpenGL -framework AppKit
 endif
 
-SRCS = main.c
+SRCS = main.c sources/queue.c sources/find_path.c
 TEST_SRCS = $(filter-out main.c, $(SRCS))
 TESTS_FILES = $(shell find ./test -name "*_test.c")
 
@@ -56,7 +56,7 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
 $(MLX_LIB):
-	@make -C $(MLX_DIR)
+	@make -C $(MLX_DIR) > /dev/null
 
 test: $(TEST_SRCS:.c=.o) $(TEST_OBJS)
 	$(CC) $(CFLAGS) $(TEST_SRCS:.c=.o) $(TEST_OBJS) $(LIBFT) -lcriterion -o test.out && ./test.out
