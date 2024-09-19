@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:42:37 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/19 17:44:33 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/19 18:04:01 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "mlx/mlx.h"
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/fcntl.h>
 
 typedef struct s_point
 {
@@ -69,7 +70,27 @@ void					process_map_element(char map_el,
 void					explore_neighbours(t_point current, char **visited,
 							t_queue *queue, t_map *map);
 void					free_visited_map(char **visited, int rows);
+
+// sources/queue.c
+
 void					enqueue(t_queue *queue, t_point point);
 int						is_queue_empty(t_queue *queue);
 t_point					dequeue(t_queue *queue);
+
+// sources/check_map.c
+void					initialize_map_check_variables(t_map *map,
+							int *num_exits, int *num_starts, int *first_line,
+							int *map_index);
+void					check_line_validity(char *line, char *prev_line,
+							size_t map_line_length, int first_line);
+void					update_map_elements(char *line, int *num_exits,
+							int *num_starts, t_map *map, int map_index);
+void					check_final_conditions(int num_exits, int num_starts,
+							t_map *map);
+
+// sources/utilities.c
+void					free_and_exit(char *str);
+void					counts_occurences(char *line, int *num_exits, char c,
+							int *x);
+int						line_only_contains_ones(char *line);
 #endif
