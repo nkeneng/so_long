@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:42:37 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/19 18:04:01 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/19 18:31:38 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,18 @@ typedef struct s_player
 	t_point				position;
 }						t_player;
 
+typedef struct s_map
+{
+	char				**map;
+	int					width;
+	int					height;
+	t_point				start_pt;
+	t_point				exit_pt;
+	int					collectibles;
+}						t_map;
+
+// Only used for BFS
+
 typedef struct s_queue_node
 {
 	t_point				point;
@@ -44,16 +56,6 @@ typedef struct s_queue
 	t_queue_node		*front;
 	t_queue_node		*rear;
 }						t_queue;
-
-typedef struct s_map
-{
-	char				**map;
-	int					width;
-	int					height;
-	t_point				start_pt;
-	t_point				exit_pt;
-	int					collectibles;
-}						t_map;
 
 /*typedef struct s_data*/
 /*{*/
@@ -93,4 +95,5 @@ void					free_and_exit(char *str);
 void					counts_occurences(char *line, int *num_exits, char c,
 							int *x);
 int						line_only_contains_ones(char *line);
+int						only_valid_characters(char *line);
 #endif

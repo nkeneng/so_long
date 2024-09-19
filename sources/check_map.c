@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:56:10 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/19 17:58:42 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/19 19:03:41 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	check_line_validity(char *line, char *prev_line, size_t map_line_length,
 	}
 	else if (!first_line)
 	{
+		if (!only_valid_characters(line))
+			free_and_exit("Error\nMap has invalid characters\n");
 		if (line[0] != '1' || line[ft_strlen(line) - 2] != '1')
 			free_and_exit("Error\nMap is not closed middle lines\n");
 	}
@@ -47,15 +49,15 @@ void	check_line_validity(char *line, char *prev_line, size_t map_line_length,
 void	update_map_elements(char *line, int *num_exits, int *num_starts,
 		t_map *map, int map_index)
 {
-	counts_occurences(line, num_exits, 'E', &(*map).exit_pt.x);
-	counts_occurences(line, num_starts, 'P', &(*map).start_pt.x);
+	counts_occurences(line, num_exits, 'E', &(*map).exit_pt.y);
+	counts_occurences(line, num_starts, 'P', &(*map).start_pt.y);
 	counts_occurences(line, &(*map).collectibles, 'C', 0);
 	if (*num_exits > 1 || *num_starts > 1)
 		free_and_exit("Error\nMap has more than one exit or start\n");
-	if ((*map).exit_pt.x != -1 && (*map).exit_pt.y == -1)
-		(*map).exit_pt.y = map_index;
-	if ((*map).start_pt.x != -1 && (*map).start_pt.y == -1)
-		(*map).start_pt.y = map_index;
+	if ((*map).exit_pt.y != -1 && (*map).exit_pt.x == -1)
+		(*map).exit_pt.x = map_index;
+	if ((*map).start_pt.y != -1 && (*map).start_pt.x == -1)
+		(*map).start_pt.x = map_index;
 }
 
 void	check_final_conditions(int num_exits, int num_starts, t_map *map)

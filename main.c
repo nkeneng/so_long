@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:13:25 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/19 18:05:05 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/19 19:03:58 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ void	check_map(int fd, t_map *map)
 		if (line == NULL)
 			break ;
 		(*map).map[map_index] = ft_strdup(line);
-		map_index++;
 		if (!first_line)
 			update_map_elements(line, &num_exits, &num_starts, map, map_index);
+		map_index++;
 		free(prev_line);
 		prev_line = ft_strdup(line);
 		free(line);
@@ -81,6 +81,7 @@ void	check_map(int fd, t_map *map)
 		first_line = 0;
 	}
 	check_final_conditions(num_exits, num_starts, map);
+	ft_printf("Start point: x-> %d, y -> %d\n", map->start_pt.x, map->start_pt.y);
 	(*map).width = map_line_length;
 }
 

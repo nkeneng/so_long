@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:59:12 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/19 18:03:53 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/19 18:59:31 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,33 @@ void	counts_occurences(char *line, int *num_exits, char c, int *x)
 
 int	line_only_contains_ones(char *line)
 {
-	char	*str;
 	int		i;
+	size_t	len;
 
 	i = 0;
-	str = malloc(ft_strlen(line));
-	ft_strlcpy(str, line, ft_strlen(line) - 1);
-	while (str[i])
+	len = ft_strlen(line);
+	while (line[i] && i < (int)len - 1)
 	{
-		if (*str != '1')
+		if (line[i] != '1')
 			return (0);
 		i++;
 	}
-	if (str)
-		free(str);
+	return (1);
+}
+
+int	only_valid_characters(char *line)
+{
+	int		i;
+	size_t	len;
+
+	i = 0;
+	len = ft_strlen(line);
+	while (line[i] && i < (int)len - 1)
+	{
+		if (line[i] != '1' && line[i] != '0' && line[i] != 'P' && line[i] != 'E'
+			&& line[i] != 'C')
+			return (0);
+		i++;
+	}
 	return (1);
 }
