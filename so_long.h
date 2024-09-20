@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:42:37 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/19 18:31:38 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/20 17:32:30 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_map
 	t_point				start_pt;
 	t_point				exit_pt;
 	int					collectibles;
+	t_player			player;
 }						t_map;
 
 // Only used for BFS
@@ -84,14 +85,14 @@ void					initialize_map_check_variables(t_map *map,
 							int *num_exits, int *num_starts, int *first_line,
 							int *map_index);
 void					check_line_validity(char *line, char *prev_line,
-							size_t map_line_length, int first_line);
+							int first_line, t_map *map);
 void					update_map_elements(char *line, int *num_exits,
 							int *num_starts, t_map *map, int map_index);
 void					check_final_conditions(int num_exits, int num_starts,
 							t_map *map);
 
 // sources/utilities.c
-void					free_and_exit(char *str);
+int						free_and_exit(char *str, t_map *map);
 void					counts_occurences(char *line, int *num_exits, char c,
 							int *x);
 int						line_only_contains_ones(char *line);

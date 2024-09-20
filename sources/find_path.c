@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:35:14 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/19 19:06:44 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/20 16:51:30 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	explore_neighbours(t_point current, char **visited, t_queue *queue,
 				next_point.y = new_y;
 				next_point.x = new_x;
 				enqueue(queue, next_point);
-				print_visited_map(visited, map->width, map->height);
+				// print_visited_map(visited, map->width, map->height);
 			}
 		}
 		i++;

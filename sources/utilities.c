@@ -6,16 +6,27 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:59:12 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/19 18:59:31 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/20 17:41:18 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-void	free_and_exit(char *str)
+int	free_and_exit(char *str, t_map *map)
 {
-	ft_putstr_fd(str, 2);
-	// freeeeee
+	int	i;
+
+	i = 0;
+	while (i < map->height)
+	{
+		free(map->map[i]);
+		i++;
+	}
+	free(map->map);
+	if (ft_strncmp(str, "", 1) == 0)
+		exit(EXIT_SUCCESS);
+	else
+		ft_putstr_fd(str, 2);
 	exit(EXIT_FAILURE);
 }
 
