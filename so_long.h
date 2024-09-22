@@ -6,12 +6,19 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:42:37 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/21 18:53:29 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/22 12:03:24 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SO_LONG_H
 # define SO_LONG_H
+
+// DEFINES
+
+# define WALL_IMG "assets/xpm/wall.xpm"
+/*# define P_FRONT "assets/xpm/player/front.xpm"*/
+/*# define P_BACK "assets/xpm/player/back.xpm"*/
+# define XPM_SIZE 64
 
 # include "libft/ft_printf/ft_printf.h"
 # include "libft/get_next_line/get_next_line.h"
@@ -44,11 +51,18 @@ typedef struct s_map
 	t_player			player;
 }						t_map;
 
+typedef struct t_xpm
+{
+	t_point				position;
+	void				*ptr;
+}						t_xpm;
+
 typedef struct s_game
 {
 	void				*mlx;
 	void				*win;
 	t_map				map;
+	t_xpm				wall;
 }						t_game;
 
 // Only used for BFS
@@ -95,4 +109,7 @@ void					counts_occurences(char *line, int *num_exits, char c,
 							int *x);
 int						line_only_contains_ones(char *line);
 int						only_valid_characters(char *line);
+
+// sources/xpm.c
+t_xpm					create_xpm(char *path, t_game *game);
 #endif

@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:13:25 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/22 10:35:20 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/22 12:04:12 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	check_map(char *file, t_map *map)
 	check_final_conditions(num_exits, num_starts, map);
 	(*map).map = ft_split(map_temp, '\n');
 	free(map_temp);
+	(*map).width--;
 	ft_printf("Start point: x-> %d, y -> %d\n", map->start_pt.x,
 		map->start_pt.y);
 }
@@ -132,22 +133,42 @@ void	init_map(t_game *game)
 	game->map.player.collectibles = 0;
 }
 
-// void	open_window(t_map *map)
-// {
-// 	t_point	s;
-//
-// 	s.x = map->width * 100;
-// 	s.y = map->height * 100;
-// 	map->game.win = mlx_new_window(map->game.mlx, s.x, s.y, "SO LONG");
-// 	mlx_hook(map->game.win, 17, 0, NULL, map);
-// }
-//
-// void	handle_game(t_map *map)
-// {
-// 	map->game.mlx = mlx_init();
-// 	open_window(map);
-// 	mlx_loop(map->game.mlx);
-// }
+void	draw_xpm(t_xpm xpm, int x, int y, t_game *game)
+{
+	mlx_put_image_to_window(game->mlx, game->win, xpm.ptr, y * XPM_SIZE, x * XPM_SIZE);
+}
+
+void	open_window(t_game *game)
+{
+	t_point	s;
+	int		x;
+	int		y;
+
+	s.x = game->map.width * XPM_SIZE;
+	s.y = game->map.height * XPM_SIZE;
+	game->win = mlx_new_window(game->mlx, s.x, s.y, "SO LONG");
+	game->wall = create_xpm(WALL_IMG, game);
+	x = 0;
+	while (x < game->map.height)
+	{
+		y = 0;
+		while (y < game->map.width)
+		{
+			if (game->map.map[x][y] == '1')
+				draw_xpm(game->wall, x, y, game);
+			y++;
+		}
+		x++;
+	}
+	mlx_hook(game->win, 17, 0, NULL, game);
+}
+
+void	handle_game(t_game *game)
+{
+	game->mlx = mlx_init();
+	open_window(game);
+	mlx_loop(game->mlx);
+}
 
 int	main(int argc, char *argv[])
 {
@@ -164,6 +185,6 @@ int	main(int argc, char *argv[])
 		ft_printf("Found %d collectibles\n", game.map.collectibles);
 	else
 		free_and_exit("Error\nPath not found\n", &game.map);
-	// handle_game(&game.map);
+	handle_game(&game);
 	return (free_and_exit("", &game.map));
 }

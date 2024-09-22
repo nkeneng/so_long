@@ -19,7 +19,8 @@ else
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/X11/lib -lXext -lX11 -framework OpenGL -framework AppKit
 endif
 
-SRCS = main.c sources/queue.c sources/find_path.c sources/utilities.c sources/check_map.c
+SRCS = main.c sources/queue.c sources/find_path.c sources/utilities.c sources/check_map.c \
+	   sources/xpm.c
 TEST_SRCS = $(filter-out main.c, $(SRCS))
 TESTS_FILES = $(shell find ./test -name "*_test.c")
 
