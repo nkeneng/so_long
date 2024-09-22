@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:42:37 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/20 17:32:30 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/21 18:53:29 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,13 @@ typedef struct s_map
 	t_player			player;
 }						t_map;
 
+typedef struct s_game
+{
+	void				*mlx;
+	void				*win;
+	t_map				map;
+}						t_game;
+
 // Only used for BFS
 
 typedef struct s_queue_node
@@ -57,14 +64,6 @@ typedef struct s_queue
 	t_queue_node		*front;
 	t_queue_node		*rear;
 }						t_queue;
-
-/*typedef struct s_data*/
-/*{*/
-/*	void			*mlx_ptr;*/
-/*	void			*win_ptr;*/
-/*	void			*textures[5];*/
-/*	t_map			*map;*/
-/*}					t_data;*/
 
 char					**initialize_visited_map(t_map *map);
 void					initialize_queue(t_queue *queue);
@@ -82,12 +81,11 @@ t_point					dequeue(t_queue *queue);
 
 // sources/check_map.c
 void					initialize_map_check_variables(t_map *map,
-							int *num_exits, int *num_starts, int *first_line,
-							int *map_index);
-void					check_line_validity(char *line, char *prev_line,
-							int first_line, t_map *map);
+							int *num_exits, int *num_starts, int *first_line);
+void					check_line_validity(char *line, int first_line,
+							t_map *map);
 void					update_map_elements(char *line, int *num_exits,
-							int *num_starts, t_map *map, int map_index);
+							int *num_starts, t_map *map);
 void					check_final_conditions(int num_exits, int num_starts,
 							t_map *map);
 

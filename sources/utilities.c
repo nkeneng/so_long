@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:59:12 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/20 17:41:18 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/21 18:59:52 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	free_and_exit(char *str, t_map *map)
 	int	i;
 
 	i = 0;
-	while (i < map->height)
+	while (map->map && i < map->height)
 	{
 		free(map->map[i]);
 		i++;

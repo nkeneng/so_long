@@ -56,7 +56,7 @@ libft:
 	$(MAKE) -C libft
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
 $(MLX_LIB):
 	@make -C $(MLX_DIR) > /dev/null
@@ -71,10 +71,12 @@ clean:
 	rm -f $(OBJS)
 	rm -f $(TEST_SRCS:.c=.o) $(TEST_OBJS)
 	$(MAKE) -C libft clean
+	$(MAKE) -C $(MLX_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
 	rm -f test.out
+	rm -f $(MLX_LIB)
 	$(MAKE) -C libft fclean
 
 re: fclean all

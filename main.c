@@ -6,10 +6,11 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:13:25 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/20 17:43:45 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/22 10:35:20 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft/lib_ft/libft.h"
 #include "so_long.h"
 
 int	count_lines(int fd)
@@ -45,41 +46,44 @@ int	open_map_file(char *file)
 	return (fd);
 }
 
-void	check_map(int fd, t_map *map)
+void	check_map(char *file, t_map *map)
 {
 	char	*line;
-	char	*prev_line;
+	char	*map_temp;
 	int		first_line;
 	int		num_exits;
 	int		num_starts;
-	int		map_index;
+	int		fd;
 
-	initialize_map_check_variables(map, &num_exits, &num_starts, &first_line,
-		&map_index);
+	map_temp = ft_strdup("");
+	fd = open_map_file(file);
+	initialize_map_check_variables(map, &num_exits, &num_starts, &first_line);
 	line = get_next_line(fd);
-	prev_line = NULL;
 	if (!line)
 		free_and_exit("Error\nEmpty file", map);
 	(*map).width = ft_strlen(line);
 	while (1)
 	{
-		check_line_validity(line, prev_line, first_line, map);
 		if (line == NULL)
+		{
+			free(line);
 			break ;
-		(*map).map[map_index] = ft_strdup(line);
+		}
+		(*map).height++;
+		check_line_validity(line, first_line, map);
 		if (!first_line)
-			update_map_elements(line, &num_exits, &num_starts, map, map_index);
-		map_index++;
-		free(prev_line);
-		prev_line = ft_strdup(line);
+			update_map_elements(line, &num_exits, &num_starts, map);
+		map_temp = ft_stradd(&map_temp, line);
 		free(line);
 		line = get_next_line(fd);
 		first_line = 0;
 	}
-	free(line);
-	free(prev_line);
+	close(fd);
 	check_final_conditions(num_exits, num_starts, map);
-	ft_printf("Start point: x-> %d, y -> %d\n", map->start_pt.x, map->start_pt.y);
+	(*map).map = ft_split(map_temp, '\n');
+	free(map_temp);
+	ft_printf("Start point: x-> %d, y -> %d\n", map->start_pt.x,
+		map->start_pt.y);
 }
 
 int	check_map_navigation(t_map *map)
@@ -111,46 +115,55 @@ int	check_map_navigation(t_map *map)
 		return (0);
 }
 
-void init_map(t_map *map)
+void	init_point(t_point *point)
 {
-	map->map = NULL;
-	map->width = 0;
-	map->height = 0;
-	map->collectibles = 0;
-	map->exit_pt.x = -1;
-	map->exit_pt.y = -1;
-	map->start_pt.x = -1;
-	map->start_pt.y = -1;
-	map->player.collectibles = 0;
+	point->x = -1;
+	point->y = -1;
 }
+
+void	init_map(t_game *game)
+{
+	game->map.map = NULL;
+	game->map.width = 0;
+	game->map.height = 0;
+	game->map.collectibles = 0;
+	init_point(&game->map.exit_pt);
+	init_point(&game->map.start_pt);
+	game->map.player.collectibles = 0;
+}
+
+// void	open_window(t_map *map)
+// {
+// 	t_point	s;
+//
+// 	s.x = map->width * 100;
+// 	s.y = map->height * 100;
+// 	map->game.win = mlx_new_window(map->game.mlx, s.x, s.y, "SO LONG");
+// 	mlx_hook(map->game.win, 17, 0, NULL, map);
+// }
+//
+// void	handle_game(t_map *map)
+// {
+// 	map->game.mlx = mlx_init();
+// 	open_window(map);
+// 	mlx_loop(map->game.mlx);
+// }
 
 int	main(int argc, char *argv[])
 {
-	t_map		map;
-	int			fd;
-	int			map_lines;
+	t_game	game;
 
 	if (argc != 2)
 	{
 		ft_putstr_fd("Error\nWrong number of arguments\n", 2);
 		return (EXIT_FAILURE);
 	}
-	map_lines = 0;
-	init_map(&map);
-	fd = open_map_file(argv[1]);
-	map_lines = count_lines(fd);
-	if (!map_lines)
-		free_and_exit("File Empty", &map);
-	(map.map) = malloc(map_lines * sizeof(char *));
-	map.height = map_lines;
-	ft_printf("Map height: %d\n", map.height);
-	close(fd);
-	fd = open_map_file(argv[1]);
-	check_map(fd, &map);
-	close(fd);
-	if (check_map_navigation(&map))
-		ft_printf("Found %d collectibles\n", map.collectibles);
+	init_map(&game);
+	check_map(argv[1], &game.map);
+	if (check_map_navigation(&game.map))
+		ft_printf("Found %d collectibles\n", game.map.collectibles);
 	else
-		free_and_exit("Error\nPath not found\n", &map);
-	return (free_and_exit("", &map));
+		free_and_exit("Error\nPath not found\n", &game.map);
+	// handle_game(&game.map);
+	return (free_and_exit("", &game.map));
 }
