@@ -38,7 +38,7 @@ debug: all
 	lldb $(NAME) map.ber
 
 valgrind: all
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) map.ber
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) assets/maps/map.ber
 
 submodules:
 	@if [ ! -d "mlx" ]; then \

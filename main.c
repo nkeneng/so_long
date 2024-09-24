@@ -23,13 +23,13 @@ void	check_map(char *file, t_map *map)
 
 	if (ft_strncmp(file + ft_strlen(file) - 4, ".ber", 4) != 0)
 		free_map("Error\nInvalid file extension\n", map, 1);
-	map_temp = ft_strdup("");
 	fd = open_map_file(file);
 	initialize_map_check_variables(map, &num_exits, &num_starts, &first_line);
 	line = get_next_line(fd);
 	if (!line)
 		free_map("Error\nEmpty file", map, 1);
 	(*map).width = ft_strlen(line);
+	map_temp = ft_strdup("");
 	while (1)
 	{
 		if (line == NULL)
@@ -95,6 +95,7 @@ void	init_point(t_point *point)
 void	init_map(t_game *game)
 {
 	game->moves = 0;
+	game->map.player.orientation = FRONT;
 	game->map.map = NULL;
 	game->map.width = 0;
 	game->map.height = 0;
