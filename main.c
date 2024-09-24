@@ -70,12 +70,12 @@ int	check_map_navigation(t_map *map)
 	exit_reached = 0;
 	visited = initialize_visited_map(map);
 	initialize_queue(&queue);
-	visited[map->start_pt.x][map->start_pt.y] = 1;
+	visited[map->start_pt.y][map->start_pt.x] = 1;
 	enqueue(&queue, map->start_pt);
 	while (!is_queue_empty(&queue))
 	{
 		current = dequeue(&queue);
-		map_el = map->map[current.x][current.y];
+		map_el = map->map[current.y][current.x];
 		process_map_element(map_el, &collectibles_found, &exit_reached);
 		explore_neighbours(current, visited, &queue, map);
 	}

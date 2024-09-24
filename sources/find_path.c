@@ -69,7 +69,6 @@ void	explore_neighbours(t_point current, char **visited, t_queue *queue,
 	t_point	next_point;
 
 	int directions[4][2]; // Declaration
-	// Initialization
 	directions[0][0] = -1;
 	directions[0][1] = 0; // Up
 	directions[1][0] = 1;
@@ -93,7 +92,6 @@ void	explore_neighbours(t_point current, char **visited, t_queue *queue,
 				next_point.y = new_y;
 				next_point.x = new_x;
 				enqueue(queue, next_point);
-				// print_visited_map(visited, map->width, map->height);
 			}
 		}
 		i++;
