@@ -13,21 +13,21 @@ CFLAGS = -Wall -Werror -Wextra -g
 
 MLX_DIR = ./mlx
 MLX_LIB = $(MLX_DIR)/libmlx_$(UNAME).a
+
 ifeq ($(shell uname), Linux)
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
 else
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/X11/lib -lXext -lX11 -framework OpenGL -framework AppKit
 endif
 
-SRCS = main.c sources/queue.c sources/find_path.c sources/utilities.c sources/check_map.c \
-	   sources/xpm.c
-TEST_SRCS = $(filter-out main.c, $(SRCS))
-TESTS_FILES = $(shell find ./test -name "*_test.c")
+SRCS_DIR		= ./sources/
+SRCS = main.c $(addprefix $(SRCS_DIR), \
+	   queue.c find_path.c utilities.c check_map.c \
+	   xpm.c game.c free.c game_utils.c)
 
 LIBFT = -Llibft -lft
 
 OBJS = $(SRCS:.c=.o)
-TEST_OBJS = $(TESTS_FILES:.c=.o)
 
 all: submodules libft $(MLX_LIB) $(NAME)
 
@@ -61,9 +61,6 @@ $(NAME): $(OBJS)
 
 $(MLX_LIB):
 	@make -C $(MLX_DIR) > /dev/null
-
-test: $(TEST_SRCS:.c=.o) $(TEST_OBJS)
-	$(CC) $(CFLAGS) $(TEST_SRCS:.c=.o) $(TEST_OBJS) $(LIBFT) -lcriterion -o test.out && ./test.out
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< $(INCLUDES) -o $@

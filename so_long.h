@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:42:37 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/22 12:03:24 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/24 16:41:11 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,32 @@
 // DEFINES
 
 # define WALL_IMG "assets/xpm/wall.xpm"
-/*# define P_FRONT "assets/xpm/player/front.xpm"*/
-/*# define P_BACK "assets/xpm/player/back.xpm"*/
+# define P_FRONT "assets/xpm/player/front.xpm"
+# define P_BACK "assets/xpm/player/front.xpm"
+# define P_LEFT "assets/xpm/player/front.xpm"
+# define P_RIGHT "assets/xpm/player/front.xpm"
+# define FLOOR_IMG "assets/xpm/floor.xpm"
+# define FRUIT_IMG "assets/xpm/fruit.xpm"
+# define EXIT1_IMG "assets/xpm/exit/flag1.xpm"
+# define EXIT2_IMG "assets/xpm/exit/flag2.xpm"
+
 # define XPM_SIZE 64
+
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_UP 65362
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+# define KEY_DOWN 65364
+# define KEY_Q 113
+# define KEY_ESC 65307
+
+# define FRONT 0
+# define BACK 1
+# define LEFT 2
+# define RIGHT 3
 
 # include "libft/ft_printf/ft_printf.h"
 # include "libft/get_next_line/get_next_line.h"
@@ -38,6 +61,7 @@ typedef struct s_player
 {
 	int					collectibles;
 	t_point				position;
+	int					orientation;
 }						t_player;
 
 typedef struct s_map
@@ -63,6 +87,15 @@ typedef struct s_game
 	void				*win;
 	t_map				map;
 	t_xpm				wall;
+	t_xpm				floor;
+	t_xpm				fruit;
+	t_xpm				exit1;
+	t_xpm				exit2;
+	t_xpm				player_left;
+	t_xpm				player_right;
+	t_xpm				player_front;
+	t_xpm				player_back;
+	int					moves;
 }						t_game;
 
 // Only used for BFS
@@ -104,12 +137,29 @@ void					check_final_conditions(int num_exits, int num_starts,
 							t_map *map);
 
 // sources/utilities.c
-int						free_and_exit(char *str, t_map *map);
+int						free_map(char *str, t_map *map, int exit);
 void					counts_occurences(char *line, int *num_exits, char c,
 							int *x);
 int						line_only_contains_ones(char *line);
 int						only_valid_characters(char *line);
+int						open_map_file(char *file);
 
 // sources/xpm.c
 t_xpm					create_xpm(char *path, t_game *game);
+
+// sources/game.c
+void					handle_game(t_game *game);
+
+// sources/game_utils.c
+
+void					draw_xpm(t_xpm xpm, int y, int x, t_game *game);
+void					update_game_values(t_game *game, int new_x, int new_y,
+							int orientation);
+int						is_valid_position(t_game *game, int new_y, int new_x);
+t_xpm					get_player_by_position(t_game *game);
+
+// sources/free.c
+void					delete_images(t_game *game);
+int						delete_game(t_game *game);
+
 #endif

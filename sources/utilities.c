@@ -6,13 +6,13 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:59:12 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/21 18:59:52 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/24 16:42:06 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-int	free_and_exit(char *str, t_map *map)
+int	free_map(char *str, t_map *map, int quit)
 {
 	int	i;
 
@@ -23,11 +23,11 @@ int	free_and_exit(char *str, t_map *map)
 		i++;
 	}
 	free(map->map);
-	if (ft_strncmp(str, "", 1) == 0)
-		exit(EXIT_SUCCESS);
-	else
+	if (ft_strncmp(str, "", 1) != 0)
 		ft_putstr_fd(str, 2);
-	exit(EXIT_FAILURE);
+	if (quit)
+		exit(EXIT_FAILURE);
+	return (1);
 }
 
 void	counts_occurences(char *line, int *num_exits, char c, int *x)
@@ -78,4 +78,17 @@ int	only_valid_characters(char *line)
 		i++;
 	}
 	return (1);
+}
+
+int	open_map_file(char *file)
+{
+	int	fd;
+
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+	{
+		ft_putstr_fd("Error\nCan't open file\n", 2);
+		exit(EXIT_FAILURE);
+	}
+	return (fd);
 }

@@ -6,45 +6,11 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:13:25 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/22 12:04:12 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/24 16:47:09 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/lib_ft/libft.h"
 #include "so_long.h"
-
-int	count_lines(int fd)
-{
-	char	*line;
-	int		count;
-
-	count = 0;
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-		{
-			free(line);
-			break ;
-		}
-		count++;
-		free(line);
-	}
-	return (count);
-}
-
-int	open_map_file(char *file)
-{
-	int	fd;
-
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-	{
-		ft_putstr_fd("Error\nCan't open file\n", 2);
-		exit(EXIT_FAILURE);
-	}
-	return (fd);
-}
 
 void	check_map(char *file, t_map *map)
 {
@@ -55,12 +21,14 @@ void	check_map(char *file, t_map *map)
 	int		num_starts;
 	int		fd;
 
+	if (ft_strncmp(file + ft_strlen(file) - 4, ".ber", 4) != 0)
+		free_map("Error\nInvalid file extension\n", map, 1);
 	map_temp = ft_strdup("");
 	fd = open_map_file(file);
 	initialize_map_check_variables(map, &num_exits, &num_starts, &first_line);
 	line = get_next_line(fd);
 	if (!line)
-		free_and_exit("Error\nEmpty file", map);
+		free_map("Error\nEmpty file", map, 1);
 	(*map).width = ft_strlen(line);
 	while (1)
 	{
@@ -81,6 +49,8 @@ void	check_map(char *file, t_map *map)
 	close(fd);
 	check_final_conditions(num_exits, num_starts, map);
 	(*map).map = ft_split(map_temp, '\n');
+	(*map).player.position.x = map->start_pt.x;
+	(*map).player.position.y = map->start_pt.y;
 	free(map_temp);
 	(*map).width--;
 	ft_printf("Start point: x-> %d, y -> %d\n", map->start_pt.x,
@@ -124,6 +94,7 @@ void	init_point(t_point *point)
 
 void	init_map(t_game *game)
 {
+	game->moves = 0;
 	game->map.map = NULL;
 	game->map.width = 0;
 	game->map.height = 0;
@@ -131,43 +102,7 @@ void	init_map(t_game *game)
 	init_point(&game->map.exit_pt);
 	init_point(&game->map.start_pt);
 	game->map.player.collectibles = 0;
-}
-
-void	draw_xpm(t_xpm xpm, int x, int y, t_game *game)
-{
-	mlx_put_image_to_window(game->mlx, game->win, xpm.ptr, y * XPM_SIZE, x * XPM_SIZE);
-}
-
-void	open_window(t_game *game)
-{
-	t_point	s;
-	int		x;
-	int		y;
-
-	s.x = game->map.width * XPM_SIZE;
-	s.y = game->map.height * XPM_SIZE;
-	game->win = mlx_new_window(game->mlx, s.x, s.y, "SO LONG");
-	game->wall = create_xpm(WALL_IMG, game);
-	x = 0;
-	while (x < game->map.height)
-	{
-		y = 0;
-		while (y < game->map.width)
-		{
-			if (game->map.map[x][y] == '1')
-				draw_xpm(game->wall, x, y, game);
-			y++;
-		}
-		x++;
-	}
-	mlx_hook(game->win, 17, 0, NULL, game);
-}
-
-void	handle_game(t_game *game)
-{
-	game->mlx = mlx_init();
-	open_window(game);
-	mlx_loop(game->mlx);
+	init_point(&game->map.player.position);
 }
 
 int	main(int argc, char *argv[])
@@ -184,7 +119,8 @@ int	main(int argc, char *argv[])
 	if (check_map_navigation(&game.map))
 		ft_printf("Found %d collectibles\n", game.map.collectibles);
 	else
-		free_and_exit("Error\nPath not found\n", &game.map);
+		free_map("Error\nPath not found\n", &game.map, 1);
 	handle_game(&game);
-	return (free_and_exit("", &game.map));
+	free_map("", &game.map, 0);
+	return (EXIT_SUCCESS);
 }
