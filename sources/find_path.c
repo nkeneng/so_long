@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:35:14 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/20 16:51:30 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/24 18:18:47 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,49 +46,34 @@ void	process_map_element(char map_el, int *collectibles_found,
 		*exit_reached = 1;
 }
 
-void	print_visited_map(char **visited, int width, int height)
-{
-	for (int i = 0; i < height; i++)
-	{
-		for (int j = 0; j < width; j++)
-		{
-			if (visited[i][j] == 1)
-				printf("1 "); // Visited cell
-			else
-				printf("0 "); // Unvisited cell
-		}
-		printf("\n");
-	}
-	printf("\n"); // Print a newline for better readability between steps
-}
-
 void	explore_neighbours(t_point current, char **visited, t_queue *queue,
 		t_map *map)
 {
 	int		i;
 	t_point	next_point;
+	int		directions[4][2];
+	int		new_x;
+	int		new_y;
 
-	int directions[4][2]; // Declaration
 	directions[0][0] = -1;
-	directions[0][1] = 0; // Up
+	directions[0][1] = 0;
 	directions[1][0] = 1;
-	directions[1][1] = 0; // Down
+	directions[1][1] = 0;
 	directions[2][0] = 0;
-	directions[2][1] = -1; // Left
+	directions[2][1] = -1;
 	directions[3][0] = 0;
-	directions[3][1] = 1; // Right
+	directions[3][1] = 1;
 	i = 0;
-	int new_x, new_y;
 	while (i < 4)
 	{
 		new_x = current.x + directions[i][0];
 		new_y = current.y + directions[i][1];
-		if (new_x >= 0 && new_x < map->height && new_y >= 0
-			&& new_y < map->width)
+		if (new_x >= 0 && new_x < map->width && new_y >= 0
+			&& new_y < map->height)
 		{
-			if (map->map[new_x][new_y] != '1' && !visited[new_x][new_y])
+			if (map->map[new_y][new_x] != '1' && !visited[new_y][new_x])
 			{
-				visited[new_x][new_y] = 1;
+				visited[new_y][new_x] = 1;
 				next_point.y = new_y;
 				next_point.x = new_x;
 				enqueue(queue, next_point);
