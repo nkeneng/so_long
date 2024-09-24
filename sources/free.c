@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 14:32:53 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/24 15:21:40 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/24 17:21:26 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	delete_game(t_game *game)
 	delete_images(game);
 	mlx_destroy_window(game->mlx, game->win);
 	mlx_destroy_display(game->mlx);
-	free_map("", &(game->map));
+	free_map("", &(game->map), 0);
 	free(game->mlx);
 	exit(0);
 }

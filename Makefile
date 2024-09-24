@@ -41,6 +41,10 @@ valgrind: all
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) map.ber
 
 submodules:
+	@if [ ! -d "mlx" ]; then \
+		echo "Cloning minilibx-linux..."; \
+		git clone https://github.com/42Paris/minilibx-linux.git mlx; \
+	fi
 	@if [ ! -d "libft" ]; then \
 		mkdir libft; \
 	fi
