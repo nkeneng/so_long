@@ -112,14 +112,12 @@ int	main(int argc, char *argv[])
 
 	if (argc != 2)
 	{
-		ft_putstr_fd("Error\nWrong number of arguments\n", 2);
+		ft_putstr_fd("Error\nWrong number of arguments\n", 1);
 		return (EXIT_FAILURE);
 	}
 	init_map(&game);
 	check_map(argv[1], &game.map);
-	if (check_map_navigation(&game.map))
-		ft_printf("Found %d collectibles\n", game.map.collectibles);
-	else
+	if (!check_map_navigation(&game.map))
 		free_map("Error\nPath not found\n", &game.map, 1);
 	handle_game(&game);
 	free_map("", &game.map, 0);

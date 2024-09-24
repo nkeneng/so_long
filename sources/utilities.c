@@ -24,7 +24,7 @@ int	free_map(char *str, t_map *map, int quit)
 	}
 	free(map->map);
 	if (ft_strncmp(str, "", 1) != 0)
-		ft_putstr_fd(str, 2);
+		ft_putstr_fd(str, 1);
 	if (quit)
 		exit(EXIT_FAILURE);
 	return (1);
@@ -87,7 +87,7 @@ int	open_map_file(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
-		ft_putstr_fd("Error\nCan't open file\n", 2);
+		ft_putstr_fd("Error\nCan't open file\n", 1);
 		exit(EXIT_FAILURE);
 	}
 	return (fd);
