@@ -117,6 +117,7 @@ typedef struct s_map_check {
 	int		num_exits;
 	int		num_starts;
 	char	*map_temp;
+	char *line;
 }			t_map_check;
 
 // sources/find_path.c
@@ -141,10 +142,10 @@ t_point					dequeue(t_queue *queue);
 // sources/check_map_utils.c
 void					initialize_map_check_variables(t_map *map,
 							int *num_exits, int *num_starts);
-void					check_line_validity(char *line, t_map *map);
-void					update_map_elements(char *line, int *num_exits,
+int					check_line_validity(char *line, t_map *map);
+int					update_map_elements(char *line, int *num_exits,
 							int *num_starts, t_map *map);
-void					check_final_conditions(int num_exits, int num_starts,
+int					check_final_conditions(int num_exits, int num_starts,
 							t_map *map, char *temp_map);
 
 // sources/check_map.c

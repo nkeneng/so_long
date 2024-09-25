@@ -12,43 +12,56 @@
 
 #include "../so_long.h"
 
-static void	process_line(char *line, t_map *map, t_map_check *check)
+static void	process_line(t_map *map, t_map_check *check)
 {
 	map->height++;
-	check_line_validity(line, map);
+	if(check_line_validity(check->line, map) > 0)
+	{
+		free(check->map_temp);
+		free(check->line);
+		free_map("", map, 1 , 1);
+	}
 	if (map->height > 1)
-		update_map_elements(line, &check->num_exits, &check->num_starts, map);
-	check->map_temp = ft_stradd(&check->map_temp, line);
+	{
+		if(update_map_elements(check->line, &check->num_exits, &check->num_starts, map) > 0)
+		{
+			free(check->map_temp);
+			free(check->line);
+			free_map("", map, 1 , 1);
+		}
+	}
+	check->map_temp = ft_stradd(&check->map_temp, check->line);
 }
 
 static void	read_map_lines(t_map *map, int fd, t_map_check *check)
 {
-	char	*line;
-
 	while (1)
 	{
-		line = get_next_line(fd);
-		if (line == NULL)
+		check->line = get_next_line(fd);
+		if (check->line == NULL)
 			break ;
-		process_line(line, map, check);
-		free(line);
+		process_line(map, check);
+		free(check->line);
 	}
 }
 
 void	check_map(t_map *map, int fd)
 {
-	char		*line;
 	t_map_check	check;
 
-	check = (t_map_check){0, 0, ft_strdup("")};
-	line = get_next_line(fd);
-	if (!line)
+	check = (t_map_check){0, 0, ft_strdup(""), NULL};
+	check.line = get_next_line(fd);
+	if (!check.line)
 		free_map("Error\nEmpty file", map, 1, 1);
-	map->width = ft_strlen(line);
-	process_line(line, map, &check);
-	free(line);
+	map->width = ft_strlen(check.line);
+	process_line(map, &check);
+	free(check.line);
 	read_map_lines(map, fd, &check);
-	check_final_conditions(check.num_exits, check.num_starts, map,
-		check.map_temp);
+	if (check_final_conditions(check.num_exits, check.num_starts, map,
+		check.map_temp) > 0)
+	{
+	free(check.map_temp);
+		free_map("",map , 1 , 1);
+	}
 	free(check.map_temp);
 }
