@@ -23,7 +23,7 @@ endif
 SRCS_DIR		= ./sources/
 SRCS = main.c $(addprefix $(SRCS_DIR), \
 	   queue.c find_path.c utilities.c check_map.c \
-	   xpm.c game.c free.c game_utils.c)
+	   xpm.c game.c free.c game_utils.c bfs_utils.c)
 
 LIBFT = -Llibft -lft
 

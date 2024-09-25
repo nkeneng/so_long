@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:42:37 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/25 11:14:53 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/25 11:39:37 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef struct s_queue
 	t_queue_node		*rear;
 }						t_queue;
 
+// sources/find_path.c
 char					**initialize_visited_map(t_map *map);
 void					initialize_queue(t_queue *queue);
 void					process_map_element(char map_el,
@@ -120,6 +121,10 @@ void					process_map_element(char map_el,
 void					explore_neighbours(t_point current, char **visited,
 							t_queue *queue, t_map *map);
 void					free_visited_map(char **visited, int rows);
+
+// sources/bfs_utils
+int						**init_bfs_directions(void);
+void					free_directions(int ***directions);
 
 // sources/queue.c
 

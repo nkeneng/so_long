@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:35:14 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/24 18:18:47 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/25 11:36:40 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,13 @@ void	explore_neighbours(t_point current, char **visited, t_queue *queue,
 {
 	int		i;
 	t_point	next_point;
-	int		directions[4][2];
+	int		**directions;
 	int		new_x;
 	int		new_y;
 
-	directions[0][0] = -1;
-	directions[0][1] = 0;
-	directions[1][0] = 1;
-	directions[1][1] = 0;
-	directions[2][0] = 0;
-	directions[2][1] = -1;
-	directions[3][0] = 0;
-	directions[3][1] = 1;
-	i = 0;
-	while (i < 4)
+	directions = init_bfs_directions();
+	i = -1;
+	while (++i < 4)
 	{
 		new_x = current.x + directions[i][0];
 		new_y = current.y + directions[i][1];
@@ -79,8 +72,8 @@ void	explore_neighbours(t_point current, char **visited, t_queue *queue,
 				enqueue(queue, next_point);
 			}
 		}
-		i++;
 	}
+	free_directions(&directions);
 }
 
 void	free_visited_map(char **visited, int rows)
