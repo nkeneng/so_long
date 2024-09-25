@@ -6,13 +6,13 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:59:12 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/24 16:42:06 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/25 10:56:10 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-int	free_map(char *str, t_map *map, int quit)
+int	free_map(char *str, t_map *map, int quit, int closefd)
 {
 	int	i;
 
@@ -25,6 +25,8 @@ int	free_map(char *str, t_map *map, int quit)
 	free(map->map);
 	if (ft_strncmp(str, "", 1) != 0)
 		ft_putstr_fd(str, 1);
+	if (closefd)
+		close(map->fd);
 	if (quit)
 		exit(EXIT_FAILURE);
 	return (1);

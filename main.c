@@ -6,55 +6,40 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:13:25 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/24 18:19:08 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/25 11:24:23 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	check_map(char *file, t_map *map)
+void	check_map(t_map *map, int fd)
 {
 	char	*line;
 	char	*map_temp;
-	int		first_line;
 	int		num_exits;
 	int		num_starts;
-	int		fd;
 
-	if (ft_strncmp(file + ft_strlen(file) - 4, ".ber", 4) != 0)
-		free_map("Error\nInvalid file extension\n", map, 1);
-	fd = open_map_file(file);
-	initialize_map_check_variables(map, &num_exits, &num_starts, &first_line);
+	initialize_map_check_variables(map, &num_exits, &num_starts);
 	line = get_next_line(fd);
 	if (!line)
-		free_map("Error\nEmpty file", map, 1);
+		free_map("Error\nEmpty file", map, 1, 1);
 	(*map).width = ft_strlen(line);
 	map_temp = ft_strdup("");
 	while (1)
 	{
 		if (line == NULL)
-		{
-			free(line);
 			break ;
-		}
 		(*map).height++;
-		check_line_validity(line, first_line, map);
-		if (!first_line)
+		check_line_validity(line, map);
+		if (map->height > 1)
 			update_map_elements(line, &num_exits, &num_starts, map);
 		map_temp = ft_stradd(&map_temp, line);
 		free(line);
 		line = get_next_line(fd);
-		first_line = 0;
 	}
-	close(fd);
-	check_final_conditions(num_exits, num_starts, map);
-	(*map).map = ft_split(map_temp, '\n');
-	(*map).player.position.x = map->start_pt.x;
-	(*map).player.position.y = map->start_pt.y;
+	check_final_conditions(num_exits, num_starts, map, map_temp);
+	free(line);
 	free(map_temp);
-	(*map).width--;
-	ft_printf("Start point: x-> %d, y -> %d\n", map->start_pt.x,
-		map->start_pt.y);
 }
 
 int	check_map_navigation(t_map *map)
@@ -63,7 +48,6 @@ int	check_map_navigation(t_map *map)
 	int		exit_reached;
 	t_queue	queue;
 	t_point	current;
-	char	map_el;
 	char	**visited;
 
 	collectibles_found = 0;
@@ -75,8 +59,8 @@ int	check_map_navigation(t_map *map)
 	while (!is_queue_empty(&queue))
 	{
 		current = dequeue(&queue);
-		map_el = map->map[current.y][current.x];
-		process_map_element(map_el, &collectibles_found, &exit_reached);
+		process_map_element(map->map[current.y][current.x], &collectibles_found,
+			&exit_reached);
 		explore_neighbours(current, visited, &queue, map);
 	}
 	free_visited_map(visited, map->height);
@@ -115,11 +99,14 @@ int	main(int argc, char *argv[])
 		ft_putstr_fd("Error\nWrong number of arguments\n", 1);
 		return (EXIT_FAILURE);
 	}
+	if (ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".ber", 4) != 0)
+		free_map("Error\nInvalid file extension\n", &game.map, 1, 0);
 	init_map(&game);
-	check_map(argv[1], &game.map);
+	game.map.fd = open_map_file(argv[1]);
+	check_map(&game.map, game.map.fd);
 	if (!check_map_navigation(&game.map))
-		free_map("Error\nPath not found\n", &game.map, 1);
+		free_map("Error\nPath not found\n", &game.map, 1, 1);
 	handle_game(&game);
-	free_map("", &game.map, 0);
+	free_map("", &game.map, 0, 1);
 	return (EXIT_SUCCESS);
 }

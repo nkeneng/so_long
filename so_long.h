@@ -6,7 +6,7 @@
 /*   By: stevennkeneng <snkeneng@student.42ber      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:42:37 by stevennke         #+#    #+#             */
-/*   Updated: 2024/09/24 16:41:11 by stevennke        ###   ########.fr       */
+/*   Updated: 2024/09/25 11:14:53 by stevennke        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 
 # define WALL_IMG "assets/xpm/wall.xpm"
 # define P_FRONT "assets/xpm/player/front.xpm"
-# define P_BACK "assets/xpm/player/front.xpm"
-# define P_LEFT "assets/xpm/player/front.xpm"
-# define P_RIGHT "assets/xpm/player/front.xpm"
+# define P_BACK "assets/xpm/player/back.xpm"
+# define P_LEFT "assets/xpm/player/left.xpm"
+# define P_RIGHT "assets/xpm/player/right.xpm"
 # define FLOOR_IMG "assets/xpm/floor.xpm"
 # define FRUIT_IMG "assets/xpm/fruit.xpm"
 # define EXIT1_IMG "assets/xpm/exit/flag1.xpm"
@@ -73,6 +73,7 @@ typedef struct s_map
 	t_point				exit_pt;
 	int					collectibles;
 	t_player			player;
+	int					fd;
 }						t_map;
 
 typedef struct t_xpm
@@ -128,16 +129,15 @@ t_point					dequeue(t_queue *queue);
 
 // sources/check_map.c
 void					initialize_map_check_variables(t_map *map,
-							int *num_exits, int *num_starts, int *first_line);
-void					check_line_validity(char *line, int first_line,
-							t_map *map);
+							int *num_exits, int *num_starts);
+void					check_line_validity(char *line, t_map *map);
 void					update_map_elements(char *line, int *num_exits,
 							int *num_starts, t_map *map);
 void					check_final_conditions(int num_exits, int num_starts,
-							t_map *map);
+							t_map *map, char *temp_map);
 
 // sources/utilities.c
-int						free_map(char *str, t_map *map, int exit);
+int						free_map(char *str, t_map *map, int exit, int closefd);
 void					counts_occurences(char *line, int *num_exits, char c,
 							int *x);
 int						line_only_contains_ones(char *line);
