@@ -12,36 +12,6 @@
 
 #include "so_long.h"
 
-void	check_map(t_map *map, int fd)
-{
-	char	*line;
-	char	*map_temp;
-	int		num_exits;
-	int		num_starts;
-
-	initialize_map_check_variables(map, &num_exits, &num_starts);
-	line = get_next_line(fd);
-	if (!line)
-		free_map("Error\nEmpty file", map, 1, 1);
-	(*map).width = ft_strlen(line);
-	map_temp = ft_strdup("");
-	while (1)
-	{
-		if (line == NULL)
-			break ;
-		(*map).height++;
-		check_line_validity(line, map);
-		if (map->height > 1)
-			update_map_elements(line, &num_exits, &num_starts, map);
-		map_temp = ft_stradd(&map_temp, line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	check_final_conditions(num_exits, num_starts, map, map_temp);
-	free(line);
-	free(map_temp);
-}
-
 int	check_map_navigation(t_map *map)
 {
 	int		collectibles_found;

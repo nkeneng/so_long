@@ -113,6 +113,12 @@ typedef struct s_queue
 	t_queue_node		*rear;
 }						t_queue;
 
+typedef struct s_map_check {
+    int num_exits;
+    int num_starts;
+    char *map_temp;
+} t_map_check;
+
 // sources/find_path.c
 char					**initialize_visited_map(t_map *map);
 void					initialize_queue(t_queue *queue);
@@ -132,7 +138,7 @@ void					enqueue(t_queue *queue, t_point point);
 int						is_queue_empty(t_queue *queue);
 t_point					dequeue(t_queue *queue);
 
-// sources/check_map.c
+// sources/check_map_utils.c
 void					initialize_map_check_variables(t_map *map,
 							int *num_exits, int *num_starts);
 void					check_line_validity(char *line, t_map *map);
@@ -140,6 +146,9 @@ void					update_map_elements(char *line, int *num_exits,
 							int *num_starts, t_map *map);
 void					check_final_conditions(int num_exits, int num_starts,
 							t_map *map, char *temp_map);
+
+// sources/check_map.c
+void check_map(t_map *map, int fd);
 
 // sources/utilities.c
 int						free_map(char *str, t_map *map, int exit, int closefd);
