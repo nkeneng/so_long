@@ -30,7 +30,7 @@ int	delete_game(t_game *game)
 	delete_images(game);
 	mlx_destroy_window(game->mlx, game->win);
 	mlx_destroy_display(game->mlx);
-	free_map("", &(game->map), 0);
+	free_map("", &(game->map), 0, 1);
 	free(game->mlx);
 	exit(0);
 }
