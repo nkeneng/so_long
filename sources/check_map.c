@@ -19,6 +19,7 @@ static void	process_line(t_map *map, t_map_check *check)
 	{
 		free(check->map_temp);
 		free(check->line);
+		get_next_line(-1);
 		free_map("", map, 1 , 1);
 	}
 	if (map->height > 1)
@@ -27,6 +28,7 @@ static void	process_line(t_map *map, t_map_check *check)
 		{
 			free(check->map_temp);
 			free(check->line);
+			get_next_line(-1);
 			free_map("", map, 1 , 1);
 		}
 	}
